@@ -4,7 +4,7 @@
 Es un proyecto base para Node.js con Typescript y base de datos MongoDB
 
 ## Instalación
-1. Clonar el repositorio: `git clone https://github.com/ingferchorojas/nodejs-mongodb.git`
+1. Clonar el repositorio: `git clone https://github.com/ingferchorojas/fox-tecnologia-backend`
 2. Instalar dependencias: `npm install`
 3. Crear el archivo .env 
 
