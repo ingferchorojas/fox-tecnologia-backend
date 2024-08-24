@@ -18,10 +18,10 @@ JWT_SECRET=xxxx
 2. Hacer una petición al servidor usando una herramienta como Postman o cURL:
   
 
-Post - http://localhost:3000/api/signup 
+Post - http://localhost:3000/api/auth/signup 
 ```json
 {
-   "email":"ejemplo@ejemplo.com",
+   "username":"user01",
    "password":"123456"
 }
 ```
@@ -29,7 +29,7 @@ Post - http://localhost:3000/api/signup
 Post - http://localhost:3000/api/auth/login
 ```json
 {
-   "email":"ejemplo@ejemplo.com",
+   "email":"user01",
    "password":"123456"
 }
 ```
