@@ -6,6 +6,7 @@ interface IClient extends Document {
   phone: string;
   latitude: number;
   longitude: number;
+  username: string;
 }
 
 const clientSchema = new Schema({
@@ -14,6 +15,7 @@ const clientSchema = new Schema({
   phone: { type: String, required: true },
   latitude: { type: Number, required: true },
   longitude: { type: Number, required: true },
+  username: { type: String, required: true }
 });
 
 export default model<IClient>("Clients", clientSchema);

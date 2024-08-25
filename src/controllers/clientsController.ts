@@ -4,7 +4,7 @@ import Client from "../models/Client"; // Asegúrate de tener el modelo Client d
 // Crear un nuevo cliente
 export const createClient = async (req: Request, res: Response) => {
   try {
-    const { name, address, phone, latitude, longitude } = req.body;
+    const { name, address, phone, latitude, longitude, username } = req.body;
 
     const newClient = new Client({
       name,
@@ -12,6 +12,7 @@ export const createClient = async (req: Request, res: Response) => {
       phone,
       latitude,
       longitude,
+      username
     });
 
     // Guardar el nuevo cliente en la base de datos
@@ -27,7 +28,7 @@ export const createClient = async (req: Request, res: Response) => {
 // Listar todos los clientes
 export const listClients = async (req: Request, res: Response) => {
   try {
-    const clients = await Client.find();
+    const clients = await Client.find({username: req.body.username});
     res.status(200).json({ data: clients, message: "Lista de clientes", error: false });
   } catch (error) {
     console.log(error);
