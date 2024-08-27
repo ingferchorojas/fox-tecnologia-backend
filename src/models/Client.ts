@@ -1,4 +1,4 @@
-import { Schema, model, Document } from "mongoose";
+import { Schema, model, Document, Types } from "mongoose";
 
 interface IClient extends Document {
   name: string;
@@ -6,7 +6,8 @@ interface IClient extends Document {
   phone: string;
   latitude: number;
   longitude: number;
-  username: string;
+  user_id: Types.ObjectId;  // Agregado user_id
+  deleted_at: Date;
 }
 
 const clientSchema = new Schema({
@@ -15,7 +16,10 @@ const clientSchema = new Schema({
   phone: { type: String, required: true },
   latitude: { type: Number, required: true },
   longitude: { type: Number, required: true },
-  username: { type: String, required: true }
+  user_id: { type: Schema.Types.ObjectId, required: true, ref: "Users" },  // user_id de tipo ObjectId
+  deleted_at: { type: Date, default: null }
+}, {
+  timestamps: true
 });
 
 export default model<IClient>("Clients", clientSchema);

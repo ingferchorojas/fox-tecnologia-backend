@@ -9,9 +9,15 @@ export const getUser = async (req: Request, res: Response) => {
   try {
     const username = req.body.username;
     console.log(req.body);
-    const user = await User.findOne({ username: username });
+    const user = await User.findOne({ username, deleted_at: null });
     if (!user) {
       return res.status(404).json({ data: {}, message: "Usuario no encontrado", error: true });
+    }
+    const result = {
+      username: user.username,
+      phone: user?.phone ?? '',
+      first_name: user?.first_name ?? '',
+      last_name: user?.last_name ?? ''
     }
     res.json({ data: { username: user.username }, message: "Datos del usuario", error: false });
   } catch (error) {
@@ -22,13 +28,16 @@ export const getUser = async (req: Request, res: Response) => {
 
 export const signup = async (req: Request, res: Response) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, first_name, last_name, phone } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const newUser = new User({
       username,
       password: hashedPassword,
+      phone: phone ?? '',
+      first_name: first_name ?? '',
+      last_name: last_name ?? ''
     });
 
     // Verificar si el usuario ya existe
@@ -41,9 +50,11 @@ export const signup = async (req: Request, res: Response) => {
       });
     }
     
-    await newUser.save();
+    const data = await newUser.save();
 
-    res.status(201).json({ data: {}, message: "Usuario creado exitosamente", error: false });
+    console.log('ver',data)
+
+    res.status(201).json({ data, message: "Usuario creado exitosamente", error: false });
   } catch (error) {
     console.log(error);
     res.status(500).json({ data: {}, message: "Error interno del servidor", error: true });
@@ -54,7 +65,7 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { username, password } = req.body;
 
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ username, deleted_at: null });
 
     if (!user) {
       return res.status(401).json({ data: {}, message: "Autenticación fallida", error: true });
@@ -66,7 +77,7 @@ export const login = async (req: Request, res: Response) => {
       return res.status(401).json({ data: {}, message: "Autenticación fallida", error: true });
     }
 
-    const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET || 'secret', {
+    const token = jwt.sign({ username: user.username, user_id: user._id }, process.env.JWT_SECRET || 'secret', {
       expiresIn: "60000h",
     });
 
