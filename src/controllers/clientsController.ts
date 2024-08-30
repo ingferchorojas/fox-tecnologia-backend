@@ -28,13 +28,33 @@ export const createClient = async (req: Request, res: Response) => {
 // Listar todos los clientes
 export const listClients = async (req: Request, res: Response) => {
   try {
-    const clients = await Client.find({ user_id: req.body.user_id, deleted_at: null });
-    res.status(200).json({ data: clients, message: "Lista de clientes", error: false });
+    const page = req?.query?.page ? Number(req.query.page) : 1;
+    const limit = req?.query?.limit ? Number(req.query.limit) : 10;
+
+    const skip = (page - 1) * limit;
+
+    // Obtener los clientes con paginación
+    const clients = await Client.find({ user_id: req.body.user_id, deleted_at: null })
+                                .skip(skip)
+                                .limit(limit);
+
+    // Contar el número total de clientes para la paginación
+    const totalClients = await Client.countDocuments({ user_id: req.body.user_id, deleted_at: null });
+
+    res.status(200).json({
+      data: clients,
+      totalClients,
+      totalPages: Math.ceil(totalClients / limit),
+      currentPage: page,
+      message: "Lista de clientes",
+      error: false
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ data: {}, message: "Error interno del servidor", error: true });
   }
 };
+
 
 // Buscar un cliente por nombre
 export const getClient = async (req: Request, res: Response) => {

@@ -5,7 +5,8 @@ import dotenv from 'dotenv';
 
 import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
-import clientRoutes from './routes/clientRoutes'; // Importa las rutas de clientes
+import clientRoutes from './routes/clientRoutes';
+import orderRoutes from './routes/orderRoutes';
 
 dotenv.config();
 
@@ -39,7 +40,8 @@ connectToDatabase();
 
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
-app.use('/api/client', clientRoutes); // Agrega las rutas de clientes
+app.use('/api/client', clientRoutes);
+app.use('/api/order', orderRoutes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server running on port ${port}`));

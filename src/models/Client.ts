@@ -16,10 +16,12 @@ const clientSchema = new Schema({
   phone: { type: String, required: true },
   latitude: { type: Number, required: true },
   longitude: { type: Number, required: true },
-  user_id: { type: Schema.Types.ObjectId, required: true, ref: "Users" },  // user_id de tipo ObjectId
+  user_id: { type: Schema.Types.ObjectId, required: true, ref: "Users"},
   deleted_at: { type: Date, default: null }
 }, {
   timestamps: true
 });
+
+clientSchema.index({ user_id: -1 });
 
 export default model<IClient>("Clients", clientSchema);
